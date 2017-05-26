@@ -46,7 +46,7 @@ respawn limit 20 5
 exec /usr/bin/x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /home/<--user-->/.vnc/passwd -rfbport 5900 -shared
 ```
 
-5.<b>Reiniciar maquina</b>
+<b>5.Reiniciar maquina</b>
 
 ```bash
 $ sudo reboot
