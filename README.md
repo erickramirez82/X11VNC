@@ -22,7 +22,9 @@ Password written to: /home/<-user->/.vnc/passwd
 $ sudo x11vnc -auth guess -forever -loop -noxdamage -repeat \
   -rfbauth /home/<-user-->/.vnc/passwd -rfbport 5900 -shared
 ```
-<b>4. Configurar autoinicio en el arranque</b>
+<b>4. Configurar autoinicio en el arranque via upstart o systemd</b>
+
+<b>4.1 Configurar autoinicio en el arranque via upstart</b>
 Creamos el archivo x11vnc.conf
 
 ```bash
@@ -44,6 +46,37 @@ respawn
 respawn limit 20 5
 
 exec /usr/bin/x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /home/<--user-->/.vnc/passwd -rfbport 5900 -shared
+```
+
+<b>4.2 Configurar autoinicio en el arranque via systemd</b>
+
+Creamos el archivo x11vnc.service
+
+```bash
+$ sudo vi /lib/systemd/system/x11vnc.service
+```
+Agregamos el siguiente contenido:
+
+```
+# description "Configurar autoinicio en el arranque x11vnc "
+
+[Unit]
+Description=Start x11vnc at startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /home/<--USERNAME-->/.vnc/passwd -rfbport 5900 -shared
+
+[Install]
+WantedBy=multi-user.target
+
+```
+Guardamos el archivo y luego ejecutamos la siguientes comandos
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable x11vnc.service
 ```
 
 <b>5.Reiniciar maquina</b>
